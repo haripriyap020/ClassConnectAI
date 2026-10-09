@@ -3,76 +3,93 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-Object.defineProperty(exports, "ROOT_CONFIG_FILENAMES", {
-  enumerable: true,
-  get: function () {
-    return _configuration.ROOT_CONFIG_FILENAMES;
+exports.TokenContext = void 0;
+exports.isLastChild = isLastChild;
+exports.parentNeedsParens = parentNeedsParens;
+var parens = require("./parentheses.js");
+var _t = require("@babel/types");
+var _nodes = require("../nodes.js");
+const {
+  VISITOR_KEYS
+} = _t;
+const TokenContext = exports.TokenContext = {
+  normal: 0,
+  expressionStatement: 1,
+  arrowBody: 2,
+  exportDefault: 4,
+  arrowFlowReturnType: 8,
+  forInitHead: 16,
+  forInHead: 32,
+  forOfHead: 64,
+  forInOrInitHeadAccumulate: 128,
+  forInOrInitHeadAccumulatePassThroughMask: 128
+};
+for (const type of Object.keys(parens)) {
+  const func = parens[type];
+  if (_nodes.generatorInfosMap.has(type)) {
+    _nodes.generatorInfosMap.get(type)[2] = func;
   }
-});
-Object.defineProperty(exports, "findConfigUpwards", {
-  enumerable: true,
-  get: function () {
-    return _configuration.findConfigUpwards;
+}
+function newCalleeNeedsParens(node) {
+  let current = node;
+  while (true) {
+    switch (current.type) {
+      case "CallExpression":
+      case "ImportExpression":
+      case "OptionalCallExpression":
+      case "OptionalMemberExpression":
+        return true;
+      case "MemberExpression":
+        current = current.object;
+        break;
+      case "TaggedTemplateExpression":
+        current = current.tag;
+        break;
+      case "TSNonNullExpression":
+        current = current.expression;
+        break;
+      default:
+        return false;
+    }
   }
-});
-Object.defineProperty(exports, "findPackageData", {
-  enumerable: true,
-  get: function () {
-    return _package.findPackageData;
+}
+function parentNeedsParens(node, parent, parentId) {
+  switch (parentId) {
+    case 112:
+      if (parent.callee === node) {
+        return newCalleeNeedsParens(node);
+      }
+      break;
+    case 42:
+      return !isDecoratorMemberExpression(node) && !(node.type === "CallExpression" && isDecoratorMemberExpression(node.callee)) && node.type !== "ParenthesizedExpression";
   }
-});
-Object.defineProperty(exports, "findRelativeConfig", {
-  enumerable: true,
-  get: function () {
-    return _configuration.findRelativeConfig;
+  return false;
+}
+function isDecoratorMemberExpression(node) {
+  switch (node.type) {
+    case "Identifier":
+      return true;
+    case "MemberExpression":
+      return !node.computed && node.property.type === "Identifier" && isDecoratorMemberExpression(node.object);
+    default:
+      return false;
   }
-});
-Object.defineProperty(exports, "findRootConfig", {
-  enumerable: true,
-  get: function () {
-    return _configuration.findRootConfig;
+}
+function isLastChild(parent, child) {
+  const visitorKeys = VISITOR_KEYS[parent.type];
+  for (let i = visitorKeys.length - 1; i >= 0; i--) {
+    const val = parent[visitorKeys[i]];
+    if (val === child) {
+      return true;
+    } else if (Array.isArray(val)) {
+      let j = val.length - 1;
+      while (j >= 0 && val[j] === null) j--;
+      return j >= 0 && val[j] === child;
+    } else if (val) {
+      return false;
+    }
   }
-});
-Object.defineProperty(exports, "loadConfig", {
-  enumerable: true,
-  get: function () {
-    return _configuration.loadConfig;
-  }
-});
-Object.defineProperty(exports, "loadPlugin", {
-  enumerable: true,
-  get: function () {
-    return _plugins.loadPlugin;
-  }
-});
-Object.defineProperty(exports, "loadPreset", {
-  enumerable: true,
-  get: function () {
-    return _plugins.loadPreset;
-  }
-});
-Object.defineProperty(exports, "resolvePlugin", {
-  enumerable: true,
-  get: function () {
-    return _plugins.resolvePlugin;
-  }
-});
-Object.defineProperty(exports, "resolvePreset", {
-  enumerable: true,
-  get: function () {
-    return _plugins.resolvePreset;
-  }
-});
-Object.defineProperty(exports, "resolveShowConfigPath", {
-  enumerable: true,
-  get: function () {
-    return _configuration.resolveShowConfigPath;
-  }
-});
-var _package = require("./package.js");
-var _configuration = require("./configuration.js");
-var _plugins = require("./plugins.js");
-({});
-0 && 0;
+  return false;
+}
 
 //# sourceMappingURL=index.js.map
