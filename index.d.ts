@@ -1,92 +1,68 @@
-import { ParserOptions } from "@babel/parser";
-import { Expression, Program, Statement } from "@babel/types";
+// Last module patch version validated against: 3.0.1
 
-export interface TemplateBuilderOptions extends ParserOptions {
-    /**
-     * A set of placeholder names to automatically accept.
-     * Items in this list do not need to match `placeholderPattern`.
-     *
-     * This option cannot be used when using `%%foo%%` style placeholders.
-     */
-    placeholderWhitelist?: Set<string> | null | undefined;
+/**
+ * Returns the current time as defined by performance.now if available, and Date.now if not.
+ * The current time is updated at the start of a frame; it is thus consistent during the frame, and any timers scheduled during the same frame will be synchronized.
+ * If this method is called outside of a frame, such as in response to a user event, the current time is calculated and then fixed until the next frame,
+ * again ensuring consistent timing during event handling.
+ */
+export function now(): number;
 
+export interface Timer {
     /**
-     * A pattern to search for when looking for `Identifier` and `StringLiteral`
-     * nodes that should be considered as placeholders.
+     * Restart a timer with the specified callback and optional delay and time.
+     * This is equivalent to stopping this timer and creating a new timer with the specified arguments,
+     * although this timer retains the original invocation priority.
      *
-     * `false` will disable placeholder searching placeholders, leaving only
-     * the `placeholderWhitelist` value to find replacements.
-     *
-     * This option cannot be used when using `%%foo%%` style placeholders.
-     *
-     * @default /^[_$A-Z0-9]+$/
+     * @param callback A callback function to be invoked and passed in the apparent
+     * elapsed time since the timer became active in milliseconds.
+     * @param delay An optional numeric delay in milliseconds (default = 0) relative to time.
+     * @param time An optional time in milliseconds relative to which the delay is calculated (default = now).
      */
-    placeholderPattern?: RegExp | false | null | undefined;
+    restart(callbackFn: (elapsed: number) => void, delay?: number, time?: number): void;
 
     /**
-     * Set this to `true` to preserve comments from the template string
-     * into the resulting AST, or `false` to automatically discard comments.
-     *
-     * @default false
+     * Stop the timer.
      */
-    preserveComments?: boolean | null | undefined;
-
-    /**
-     * Set to `true` to use `%%foo%%` style placeholders, `false` to use legacy placeholders
-     * described by `placeholderPattern` or `placeholderWhitelist`.
-     *
-     * When it is not set, it behaves as `true` if there are syntactic placeholders, otherwise as `false`.
-     *
-     * @since 7.4.0
-     */
-    syntacticPlaceholders?: boolean | null | undefined;
+    stop(): void;
 }
 
-export interface TemplateBuilder<T> {
-    /**
-     * Build a new builder, merging the given options with the previous ones.
-     */
-    (opts: TemplateBuilderOptions): TemplateBuilder<T>;
+/**
+ * Schedules and returns a new timer, invoking the specified callback repeatedly until the timer is stopped.
+ * The callback is passed the (apparent) elapsed time since the timer became active.
+ *
+ * @param callback A callback function to be invoked and passed in the apparent
+ * elapsed time since the timer became active in milliseconds.
+ * @param delay An optional numeric delay in milliseconds (default = 0) relative to time.
+ * @param time An optional time in milliseconds relative to which the delay is calculated (default = now).
+ */
+export function timer(callback: (elapsed: number) => void, delay?: number, time?: number): Timer;
 
-    /**
-     * Building from a string produces an AST builder function by default.
-     */
-    (code: string, opts?: TemplateBuilderOptions): (arg?: PublicReplacements) => T;
+/**
+ * Immediately invoke any eligible timer callbacks.
+ */
+export function timerFlush(): void;
 
-    /**
-     * Building from a template literal produces an AST builder function by default.
-     */
-    (tpl: TemplateStringsArray, ...args: unknown[]): (arg?: PublicReplacements) => T;
+/**
+ * Schedules and returns a new timer, invoking the specified callback. The timer is stopped automatically
+ * on its first callback. The callback is passed the (apparent) elapsed time since the timer became active.
+ *
+ * @param callback A callback function to be invoked and passed in the apparent
+ * elapsed time since the timer became active in milliseconds.
+ * @param delay An optional numeric delay in milliseconds (default = 0) relative to time.
+ * @param time An optional time in milliseconds relative to which the delay is calculated (default = now).
+ */
+export function timeout(callback: (elapsed: number) => void, delay?: number, time?: number): Timer;
 
-    /**
-     * Allow users to explicitly create templates that produce ASTs,
-     * skipping the need for an intermediate function.
-     *
-     * Does not allow `%%foo%%` style placeholders.
-     */
-    ast: {
-        (tpl: string, opts?: TemplateBuilderOptions): T;
-        (tpl: TemplateStringsArray, ...args: unknown[]): T;
-    };
-}
-
-export type PublicReplacements = { [index: string]: unknown } | unknown[];
-
-export const smart: TemplateBuilder<Statement | Statement[]>;
-export const statement: TemplateBuilder<Statement>;
-export const statements: TemplateBuilder<Statement[]>;
-export const expression: TemplateBuilder<Expression>;
-export const program: TemplateBuilder<Program>;
-
-type DefaultTemplateBuilder = typeof smart & {
-    smart: typeof smart;
-    statement: typeof statement;
-    statements: typeof statements;
-    expression: typeof expression;
-    program: typeof program;
-    ast: typeof smart.ast;
-};
-
-declare const templateBuilder: DefaultTemplateBuilder;
-
-export default templateBuilder;
+/**
+ * Schedules and returns a new timer, invoking the specified callback repeatedly every 'delay' milliseconds
+ * until the timer is stopped.
+ * The callback is passed the (apparent) elapsed time since the timer became active.
+ *
+ * @param callback A callback function to be invoked and passed in the apparent
+ * elapsed time since the timer became active in milliseconds.
+ * @param delay An optional numeric delay in milliseconds between repeat invocations of the callback.
+ * If not specified, the interval timer behaves like the regular timer.
+ * @param time An optional time in milliseconds relative to which the initial delay is calculated (default = now).
+ */
+export function interval(callback: (elapsed: number) => void, delay?: number, time?: number): Timer;

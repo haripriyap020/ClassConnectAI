@@ -1,15 +1,15 @@
 # Installation
-> `npm install --save @types/babel__template`
+> `npm install --save @types/d3-timer`
 
 # Summary
-This package contains type definitions for @babel/template (https://github.com/babel/babel/tree/master/packages/babel-template).
+This package contains type definitions for d3-timer (https://github.com/d3/d3-timer/).
 
 # Details
-Files were exported from https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/babel__template.
+Files were exported from https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-timer.
 
 ### Additional Details
- * Last updated: Mon, 06 Nov 2023 22:41:04 GMT
- * Dependencies: [@babel/parser](https://npmjs.com/package/@babel/parser), [@babel/types](https://npmjs.com/package/@babel/types)
+ * Last updated: Tue, 07 Nov 2023 15:11:37 GMT
+ * Dependencies: none
 
 # Credits
-These definitions were written by [Troy Gerwien](https://github.com/yortus), [Marvin Hagemeister](https://github.com/marvinhagemeister), [Melvin Groenhoff](https://github.com/mgroenhoff), and [ExE Boss](https://github.com/ExE-Boss).
+These definitions were written by [Tom Wanzek](https://github.com/tomwanzek), [Alex Ford](https://github.com/gustavderdrache), [Boris Yankov](https://github.com/borisyankov), [denisname](https://github.com/denisname), and [Nathan Bierema](https://github.com/Methuselah96).

@@ -1,29 +1,34 @@
 {
-    "name": "@types/babel__template",
-    "version": "7.4.4",
-    "description": "TypeScript definitions for @babel/template",
-    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/babel__template",
+    "name": "@types/d3-timer",
+    "version": "3.0.2",
+    "description": "TypeScript definitions for d3-timer",
+    "homepage": "https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/d3-timer",
     "license": "MIT",
     "contributors": [
         {
-            "name": "Troy Gerwien",
-            "githubUsername": "yortus",
-            "url": "https://github.com/yortus"
+            "name": "Tom Wanzek",
+            "githubUsername": "tomwanzek",
+            "url": "https://github.com/tomwanzek"
         },
         {
-            "name": "Marvin Hagemeister",
-            "githubUsername": "marvinhagemeister",
-            "url": "https://github.com/marvinhagemeister"
+            "name": "Alex Ford",
+            "githubUsername": "gustavderdrache",
+            "url": "https://github.com/gustavderdrache"
         },
         {
-            "name": "Melvin Groenhoff",
-            "githubUsername": "mgroenhoff",
-            "url": "https://github.com/mgroenhoff"
+            "name": "Boris Yankov",
+            "githubUsername": "borisyankov",
+            "url": "https://github.com/borisyankov"
         },
         {
-            "name": "ExE Boss",
-            "githubUsername": "ExE-Boss",
-            "url": "https://github.com/ExE-Boss"
+            "name": "denisname",
+            "githubUsername": "denisname",
+            "url": "https://github.com/denisname"
+        },
+        {
+            "name": "Nathan Bierema",
+            "githubUsername": "Methuselah96",
+            "url": "https://github.com/Methuselah96"
         }
     ],
     "main": "",
@@ -31,13 +36,10 @@
     "repository": {
         "type": "git",
         "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
-        "directory": "types/babel__template"
+        "directory": "types/d3-timer"
     },
     "scripts": {},
-    "dependencies": {
-        "@babel/parser": "^7.1.0",
-        "@babel/types": "^7.0.0"
-    },
-    "typesPublisherContentHash": "5730d754b4d1fcd41676b093f9e32b340c749c4d37b126dfa312e394467e86c6",
+    "dependencies": {},
+    "typesPublisherContentHash": "a51fc6981e6d12715fd052f7e598dd291c354465025cbb33ece1895bdab4109c",
     "typeScriptVersion": "4.5"
 }
